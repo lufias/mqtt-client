@@ -1,0 +1,35 @@
+{
+  "name": "challenger",
+  "version": "1.0.0",
+  "description": "Challenger app api services",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "challenger",
+    "api"
+  ],
+  "author": "Saiful Azhar",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.15.0",
+    "config": "^1.19.0",
+    "cookie-parser": "^1.4.1",
+    "debug": "^2.2.0",
+    "express": "^4.13.4",
+    "express-logger": "0.0.3",
+    "express-session": "^1.13.0",
+    "formidable": "^1.0.17",
+    "fs-extra": "^0.26.7",
+    "jade": "^1.11.0",
+    "json-web-token": "^1.6.3",
+    "morgan": "^1.7.0",
+    "neo4j": "^2.0.0-RC2",
+    "node-libcurl": "^0.8.0",
+    "q": "^1.4.1",
+    "quickthumb": "0.0.12",
+    "serve-favicon": "^2.3.0",
+    "underscore": "^1.8.3"
+  }
+}
