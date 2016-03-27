@@ -21,6 +21,7 @@ var cfg  = require('config');
 //
 //----------------------------------------------------------//
 var routes = require('./routes/index');
+var authR = require('./routes/auth');
 
 //----------------------------------------------------------//
 //
@@ -72,6 +73,7 @@ var server = require('http').Server(app);
 //----------------------------------------------------------//
 
 app.use('/', routes);
+app.use('/auth', authR);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

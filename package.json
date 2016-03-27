@@ -23,7 +23,7 @@
     "formidable": "^1.0.17",
     "fs-extra": "^0.26.7",
     "jade": "^1.11.0",
-    "json-web-token": "^1.6.3",
+    "jsonwebtoken": "^5.7.0",
     "morgan": "^1.7.0",
     "neo4j": "^2.0.0-RC2",
     "node-libcurl": "^0.8.0",
