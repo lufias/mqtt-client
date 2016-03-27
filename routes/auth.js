@@ -12,7 +12,7 @@ router.get('/token/read', function(req, res){
 			return res.json({data:result});
 		},
 		function(err){
-			return res.json({error:err});
+			return res.json({error:1, data:err});
 		}
 	);	
 });
@@ -36,17 +36,17 @@ router.post('/authenticate', function(req, res){
 			var user = data.user[0].user;				
 
 			// generate token
-			jwt.encodeToken({uid:user._id}, {expiresIn:'5'}).then(
+			jwt.encodeToken({uid:user._id}, {expiresIn:'15 days'}).then(
 				function(result){
-					return res.json({token:result});										
+					return res.json({error:0, token:result});										
 				},
 				function(err){	
-					return res.json(err);										
+					return res.json({error:1, data:data.error});										
 				}
 			);				
 		}
 		else{
-			return res.json(data.error);			
+			return res.json({error:1, data:data.error});			
 		}
 		
 	};
