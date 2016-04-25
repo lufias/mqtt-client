@@ -3,6 +3,7 @@ var router = express.Router();
 var jwt = require('../app/utilities/jwt/jsonwebtoken');
 var userModel = require('../app/db-services/User');
 var async = require('async');
+var bugsnag = require('bugsnag');
 
 
 /*READ Token out of header*/
@@ -70,32 +71,39 @@ router.post('/service-authenticate', function(req, res){
 router.post('/system-register', function(req, res){
 	
 	// get the required parameter
-	var user = {
-		email: req.body.email,
-		password: req.body.password
-	}
+	var email = req.body.email;
+	var password = req.body.password;
 
 	// load the repos required
 	sysauth = require('../app/repositories/authentication/sysauth');
 
-	
 	async.waterfall([
 		// make sure the user did not yet exist in the system
 		function(callback){
-			sysauth.checkUserExist(callback, user.email);
+			sysauth.checkUserExist(callback, email);
 		},
 		function(userExist, callback){
 			if(userExist){
-				
+				// show error to client
+				callback({show:true, code:1001, message:"The user already exist in system"});
 			}
 			else{
-				callback({errlevel:1, message:"The user already exist in system"});
+				// continue adding user into the system
+				sysauth.registerUser(callback, email, password);
 			}
 		}
 		
 	], function(err, result){
-		if(err){return res.json({status:0, errlevel:2, err:err})}
-		return res.json({status:1, result:result});
+		
+		if(err && err.show){return res.json({status:0, code:err.code, message:err.message})}
+		
+		else if(err && !err.show){
+			bugsnag.notify(new Error("Server Error"), err); 
+			res.status(err.status || 500);
+			return res.json({status:0, code:1000, message:"Server Error"}); 
+		}
+
+		return res.json({status:1, message:'User has been successfully registered into the system'});
 	})
 	
 })

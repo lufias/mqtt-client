@@ -21,6 +21,19 @@ var SysAuth = function(){
 			}
 		);
 	};
+
+	this.registerUser = function(callback, email, password){
+
+		
+		userService.registerUser(email, password).then(
+			function(result){
+				callback(null, result);
+			},
+			function(err){
+				callback(err);
+			}
+		);
+	};
 };
 
 module.exports = (function(){

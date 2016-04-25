@@ -57,6 +57,34 @@ var User = function(){
 
 		return deferred.promise;
 	};
+
+	this.registerUser = function(email, password){		
+
+		// require password hasher
+		var bcrypt = require('bcrypt');
+		var saltRounds = 10;
+
+		var hashed = bcrypt.hashSync(password, saltRounds);
+
+		var deferred = q.defer();
+
+		var query = ["CREATE (user:CXPerson {email:{email}, password:{password}}) RETURN user"].join('\n');
+
+		var params = {
+			email:email,
+			password:hashed
+		};
+
+		db.cypher({
+			query:query,
+			params:params
+		}, function(err, results){
+			if (err) deferred.reject({err:err});
+			deferred.resolve(results);
+		})
+
+		return deferred.promise;
+	};
 };
 
 module.exports = (function(){
