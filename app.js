@@ -14,6 +14,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var qt   = require('quickthumb');
 var cfg  = require('config');
+var bugsnag = require('bugsnag');
 
 //----------------------------------------------------------//
 //
@@ -42,6 +43,15 @@ app.set('view engine', 'jade');
 
 //----------------------------------------------------------//
 //
+// 3rd-party service configuration
+//
+//----------------------------------------------------------//
+
+bugsnag.register(cfg.bugsnag.key);
+bugsnag.notify(new Error("Non-fatal"));
+
+//----------------------------------------------------------//
+//
 // Common middleware
 //
 //----------------------------------------------------------//
@@ -54,6 +64,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
 // Use quickthumb
 app.use(qt.static(__dirname + '/'));
 

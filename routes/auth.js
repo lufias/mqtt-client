@@ -1,7 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var jwt = require('../app/utilities/jwt/jsonwebtoken');
-var userModel = require('../app/models/User');
+var userModel = require('../app/db-services/User');
+var async = require('async');
 
 
 /*READ Token out of header*/
@@ -20,7 +21,7 @@ router.get('/token/read', function(req, res){
 // User send in the login request
 // Update user data in record
 // Generate and send token
-router.post('/authenticate', function(req, res){	
+router.post('/service-authenticate', function(req, res){	
 
 	// get user data coming in from the request
 	var user = {
@@ -64,9 +65,45 @@ router.post('/authenticate', function(req, res){
 	.then(generateToken);	
 
 	// return user id
-	
-
-
 })
+
+router.post('/system-register', function(req, res){
+	
+	// get the required parameter
+	var user = {
+		email: req.body.email,
+		password: req.body.password
+	}
+
+	// load the repos required
+	sysauth = require('../app/repositories/authentication/sysauth');
+
+	
+	async.waterfall([
+		// make sure the user did not yet exist in the system
+		function(callback){
+			sysauth.checkUserExist(callback, user.email);
+		},
+		function(userExist, callback){
+			if(userExist){
+				
+			}
+			else{
+				callback({errlevel:1, message:"The user already exist in system"});
+			}
+		}
+		
+	], function(err, result){
+		if(err){return res.json({status:0, errlevel:2, err:err})}
+		return res.json({status:1, result:result});
+	})
+	
+})
+
+router.get('/status-check', function(req, res){
+	return res.json({status:'OK'});			
+});
+
+
 
 module.exports = router;

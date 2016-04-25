@@ -13,7 +13,9 @@
   "author": "Saiful Azhar",
   "license": "ISC",
   "dependencies": {
+    "async": "^2.0.0-rc.3",
     "body-parser": "^1.15.0",
+    "bugsnag": "^1.7.0",
     "config": "^1.19.0",
     "cookie-parser": "^1.4.1",
     "debug": "^2.2.0",
@@ -26,6 +28,7 @@
     "jsonwebtoken": "^5.7.0",
     "morgan": "^1.7.0",
     "neo4j": "^2.0.0-RC2",
+    "node-bcrypt": "0.0.1",
     "node-libcurl": "^0.8.0",
     "q": "^1.4.1",
     "quickthumb": "0.0.12",
