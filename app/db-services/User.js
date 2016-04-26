@@ -35,7 +35,7 @@ var User = function(){
 
 	};
 
-	this.checkUserExist = function(email){
+	this.getUserByEmail = function(email){
 
 		var deferred = q.defer();
 
@@ -85,6 +85,7 @@ var User = function(){
 
 		return deferred.promise;
 	};
+
 };
 
 module.exports = (function(){
