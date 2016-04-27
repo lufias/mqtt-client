@@ -27,6 +27,7 @@
     "fs-extra": "^0.26.7",
     "jade": "^1.11.0",
     "jsonwebtoken": "^5.7.0",
+    "jwt-refresh-token": "0.0.4",
     "morgan": "^1.7.0",
     "neo4j": "^2.0.0-RC2",
     "node-libcurl": "^0.8.0",

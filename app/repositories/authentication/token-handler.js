@@ -15,6 +15,35 @@ var TokenHandler = function(){
 		);	
 	};
 
+	this.decodeToken = function(callback, token){		
+		jwt.decodeToken(token).then(
+			function(result){				
+				callback(null, result);
+			},
+			function(err){
+				
+				if(err.name === 'TokenExpiredError'){
+					callback({show:true, code:1004, message:"Token expires"});	
+				}
+				else{
+					callback(err);
+				}				
+				
+			}
+		);
+	};
+
+	this.refreshToken = function(callback, token, options){
+		jwt.refreshToken(token, options).then(
+			function(result){
+				callback(null, {token:result});
+			},
+			function(){
+				callback(err);
+			}
+		);
+	};
+
 };
 
 module.exports = (function(){

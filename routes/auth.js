@@ -1,8 +1,9 @@
 var express = require('express');
 var router = express.Router();
-var jwt = require('../app/utilities/jwt/jsonwebtoken');
 var async = require('async');
-var bugsnag = require('bugsnag');
+
+// load middleware
+var apiMiddleware = require('../app/middlewares').api;
 
 // load the repos required
 var sysauth = require('../app/repositories/authentication/sysauth');
@@ -13,16 +14,18 @@ var jwtRepo = require('../app/repositories/authentication/token-handler');
 var asyncErrorHandler = require('../app/utilities/ErrorHandler/AsyncErrorHandler');
 
 /*READ Token out of header*/
-router.get('/token/read', function(req, res){
-	var token = req.get('ctoken');
-	var data = jwt.decodeToken(token).then(
-		function(result){
-			return res.json({data:result});
-		},
-		function(err){
-			return res.json({error:1, data:err});
+router.get('/token/read', apiMiddleware, function(req, res){
+	
+	var token = req.query.ctoken;
+	
+	async.waterfall([
+		function(callback){
+			jwtRepo.decodeToken(callback, token);
 		}
-	);	
+	], function(err, result){
+		asyncErrorHandler.handleError(err, res);
+		return res.json(result);
+	});
 });
 
 // Registration manually into the system without external services or providers
@@ -64,7 +67,7 @@ router.post('/system-authenticate', function(req,res){
 
 	// get the required parameter
 	var email = req.body.email;
-	var password = req.body.password;
+	var password = req.body.password;	
 
 	// properties to be used later on
 	var dbUser = null;
@@ -74,12 +77,12 @@ router.post('/system-authenticate', function(req,res){
 		function(callback){
 			userRepo.getUserByEmail(callback, email);
 		},
-		function(results, callback){
+		function(results, callback){			
 			dbUser = results[0].user;			
 			sysauth.authenticatePassword(callback, password, dbUser.properties.password);
 		},
-		function(result, callback){
-			jwtRepo.generateToken(callback, {uid:dbUser._id}, {expiresIn:'15 days'});
+		function(result, callback){			
+			jwtRepo.generateToken(callback, {uid:dbUser._id}, {expiresIn:'10 s'});
 		}
 	], function(err, result){		
 		
@@ -90,7 +93,22 @@ router.post('/system-authenticate', function(req,res){
 
 });
 
+router.post('/token/refresh', function(req, res){
 
+	// get the required parameter
+	var token = req.body.token;
+
+	// get the new refreshed token
+	async.waterfall([
+		function(callback){
+			jwtRepo.refreshToken(callback, token, {expiresIn:'15 days'});
+		}
+	], function(err, result){
+		asyncErrorHandler.handleError(err, res);
+		res.json({status:1, token:result.token});
+	});
+	
+});
 
 
 

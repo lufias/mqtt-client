@@ -32,10 +32,11 @@ var SysAuth = function(){
 		);
 	};
 
-	this.authenticatePassword = function(callback, password, hashed){
+	this.authenticatePassword = function(callback, password, hashed){		
+
 		// require password hasher
-		var bcrypt = require('bcrypt');
-		var saltRounds = 10;
+		var bcrypt = require('bcrypt');		
+		var saltRounds = 10;		
 
 		if(bcrypt.compareSync(password, hashed)){
 			callback(null, true);

@@ -2,6 +2,7 @@ var Utilities = function(){
 
 	var cfg = require('config');
 	var jwt = require('jsonwebtoken');
+	var jwtRe = require('jwt-refresh-token');
 	var q = require('q');	
 
 	this.encodeToken = function(data, options){
@@ -16,7 +17,7 @@ var Utilities = function(){
 		
 	};
 
-	this.decodeToken = function(token){
+	this.decodeToken = function(token){	
 
 		var deferred = q.defer();
 
@@ -31,6 +32,20 @@ var Utilities = function(){
 
 		return deferred.promise;		
 	}
+
+	this.refreshToken = function(token, options){
+		var deferred = q.defer();
+
+		try{
+			var newToken = jwtRe.refresh(token, cfg.jwt.key, options);
+			deferred.resolve(newToken);
+		}
+		catch(err){
+			deferred.reject(err);
+		}
+
+		return deferred.promise;
+	};
 
 };
 
