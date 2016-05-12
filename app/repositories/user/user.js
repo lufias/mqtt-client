@@ -8,7 +8,7 @@ var UserRepo = function(){
 				
 				if(!result.length){
 					// show error to client
-					callback({show:true, code:1002, message:"The user not exist in system"});
+					callback({show:true, code:1002, message:"The user not exist in system", err:"ModelNotFoundException"});
 				}
 
 				callback(null, result);

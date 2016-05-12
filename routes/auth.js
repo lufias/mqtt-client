@@ -43,10 +43,10 @@ router.post('/system-register', function(req, res){
 		function(callback){
 			sysauth.checkUserExist(callback, email);
 		},
-		function(userExist, callback){
+		function(userExist, callback){			
 			if(userExist){
 				// show error to client
-				callback({show:true, code:1001, message:"The user already exist in system"});
+				callback({show:true, code:1001, message:"The user already exist in system", err:'ModelFoundException'});
 			}
 			else{
 				// continue adding user into the system
@@ -54,8 +54,7 @@ router.post('/system-register', function(req, res){
 			}
 		}
 		
-	], function(err, result){
-		
+	], function(err, result){		
 		asyncErrorHandler.handleError(err, res);
 
 		res.json({status:1, message:'User has been successfully registered into the system'});
@@ -81,11 +80,10 @@ router.post('/system-authenticate', function(req,res){
 			dbUser = results[0].user;			
 			sysauth.authenticatePassword(callback, password, dbUser.properties.password);
 		},
-		function(result, callback){			
-			jwtRepo.generateToken(callback, {uid:dbUser._id}, {expiresIn:'10 s'});
+		function(result, callback){					
+			jwtRepo.generateToken(callback, {uid:dbUser._id}, {expiresIn:'30 days'});
 		}
-	], function(err, result){		
-		
+	], function(err, result){				
 		asyncErrorHandler.handleError(err, res);
 
 		res.json({status:1, token:result.token});
@@ -101,7 +99,7 @@ router.post('/token/refresh', function(req, res){
 	// get the new refreshed token
 	async.waterfall([
 		function(callback){
-			jwtRepo.refreshToken(callback, token, {expiresIn:'15 days'});
+			jwtRepo.refreshToken(callback, token, {expiresIn:'30 days'});
 		}
 	], function(err, result){
 		asyncErrorHandler.handleError(err, res);
@@ -109,7 +107,5 @@ router.post('/token/refresh', function(req, res){
 	});
 	
 });
-
-
 
 module.exports = router;

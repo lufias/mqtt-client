@@ -23,7 +23,7 @@ var TokenHandler = function(){
 			function(err){
 				
 				if(err.name === 'TokenExpiredError'){
-					callback({show:true, code:1004, message:"Token expires"});	
+					callback({show:true, code:1004, message:"Token expires", err:err});	
 				}
 				else{
 					callback(err);

@@ -41,9 +41,9 @@ var SysAuth = function(){
 		if(bcrypt.compareSync(password, hashed)){
 			callback(null, true);
 		}
-		else{
+		else{			
 			// show error to client
-			callback({show:true, code:1003, message:"Password authentication failed"});
+			callback({show:true, code:1003, message:"Password authentication failed", err:"PasswordAuthenticationException"});
 		}
 	};	
 
