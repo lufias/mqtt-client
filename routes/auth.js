@@ -108,4 +108,40 @@ router.post('/token/refresh', function(req, res){
 	
 });
 
+router.get('/pub-user-change', function(req, res){
+
+	var mqtt    = require('mqtt');
+	var client  = mqtt.connect('mqtt://128.199.199.17:1883', {			
+			protocolVersion: 3 
+			});
+
+	client.on('connect', function () {		
+		client.publish('user1/namechange/1', 'New UserName', {retain: true, qos: 1}, function(){
+			console.log("send");		
+		});
+
+		client.end();
+	});
+
+	return res.json({status:'OK'});
+
+});
+
+router.post('/remove-topic', function(req, res){
+
+	var mqtt    = require('mqtt');
+	var client  = mqtt.connect('mqtt://128.199.199.17:1883', {
+			protocolId: 'MQIsdp',
+			protocolVersion: 3 
+			});
+
+	var topic = req.body.topic;
+
+	client.on('connect', function () {		
+		client.publish(topic, '', {retain: true, qos: 1});
+		client.end();
+	});
+
+})
+
 module.exports = router;
