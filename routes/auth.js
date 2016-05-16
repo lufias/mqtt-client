@@ -111,12 +111,10 @@ router.post('/token/refresh', function(req, res){
 router.get('/pub-user-change', function(req, res){
 
 	var mqtt    = require('mqtt');
-	var client  = mqtt.connect('mqtt://128.199.199.17:1883', {			
-			protocolVersion: 3 
-			});
+	var client  = mqtt.connect('mqtt://128.199.199.17:1883');
 
 	client.on('connect', function () {		
-		client.publish('user1/namechange/1', 'New UserName', {retain: true, qos: 1}, function(){
+		client.publish('user1/notifications/namechange/user/1', 'New UserName', {retain: true, qos: 1}, function(){
 			console.log("send");		
 		});
 
