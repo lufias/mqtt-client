@@ -3,6 +3,7 @@ var debug = require('debug')('challenger');
 var appjs = require('../app');
 var app = appjs.app;
 var server = appjs.server;
+var cfg = require('config');
 
 app.set('port', process.env.PORT || cfg.app.port);
 
