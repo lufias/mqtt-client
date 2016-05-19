@@ -4,7 +4,7 @@ var appjs = require('../app');
 var app = appjs.app;
 var server = appjs.server;
 
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || cfg.app.port);
 
 var server = server.listen(app.get('port'), function() {
   debug('Express server listening on port ' + server.address().port);
